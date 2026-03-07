@@ -18,40 +18,42 @@ APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD", "").replace(" ", "")
 def serve_index():
     return send_from_directory('.', 'index.html')
 
-@app.route('/api/contact', methods=['POST'])
+@app.route('/api/contact', methods=['POST', 'OPTIONS'])
 def contact():
-    data = request.json
-    name = data.get('name', 'N/A')
-    email = data.get('email', 'N/A')
-    issue = data.get('issue', 'N/A')
+    # Preflight CORS check for browsers
+    if request.method == "OPTIONS":
+        return jsonify({"success": True}), 200
 
-    if not APP_PASSWORD:
-        return jsonify({"error": "No email password configured. Please add GMAIL_APP_PASSWORD to .env"}), 500
-
-    msg = MIMEMultipart()
-    msg["From"] = f"NexGen Website <{SENDER_EMAIL}>"
-    msg["To"] = SENDER_EMAIL
-    msg["Subject"] = f"New Audit Request from {name}"
-    
-    body = f"""New Meeting/Audit Request!
-
-Name: {name}
-Email: {email}
-Bottleneck: {issue}
-
-Please reach out to them as soon as possible.
-"""
-    msg.attach(MIMEText(body, "plain"))
-    
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as s:
+        # Safely parse incoming data (fallback if headers are strange)
+        data = request.get_json(silent=True) or {}
+        name = data.get('name', 'N/A')
+        email = data.get('email', 'N/A')
+        issue = data.get('issue', 'N/A')
+
+        if not APP_PASSWORD:
+            return jsonify({"error": "Deploy Error: Missing GMAIL_APP_PASSWORD in Render Settings"}), 500
+
+        msg = MIMEMultipart()
+        msg["From"] = f"NexGen Website <{SENDER_EMAIL}>"
+        msg["To"] = SENDER_EMAIL
+        msg["Subject"] = f"New Audit Request from {name}"
+        
+        body = f"New Meeting/Audit Request!\n\nName: {name}\nEmail: {email}\nBottleneck: {issue}\n\nPlease reach out to them as soon as possible.\n"
+        msg.attach(MIMEText(body, "plain"))
+        
+        with smtplib.SMTP("smtp.gmail.com", 587, timeout=10) as s:
             s.starttls()
             s.login(SENDER_EMAIL, APP_PASSWORD)
             s.sendmail(SENDER_EMAIL, SENDER_EMAIL, msg.as_string())
+            
         return jsonify({"success": True})
+
     except Exception as e:
-        print(f"Error sending email: {e}")
-        return jsonify({"error": str(e)}), 500
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"Backend Crash Log:\n{error_trace}")
+        return jsonify({"error": str(e), "trace": error_trace}), 500
 
 if __name__ == '__main__':
     app.run(port=8080)
