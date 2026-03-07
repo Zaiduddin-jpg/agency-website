@@ -89,8 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const issue = document.getElementById('formIssue').value;
 
             try {
-                // Post to Python Flask Backend
-                const response = await fetch('/api/contact', {
+                // Post to Python Flask Backend explicitly hosted on Render
+                const response = await fetch('https://agency-website-sa4h.onrender.com/api/contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, issue })
