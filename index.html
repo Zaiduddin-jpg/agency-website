@@ -50,12 +50,22 @@
     }
     </script>
 
-    <!-- Cinematic Typography -->
+    <!-- Cinematic Typography & Performance Preloading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
+    </noscript>
+
+    <!-- Dynamic SVG Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306b6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2L2 7L12 12L22 7L12 2Z'/><path d='M2 17L12 22L22 17'/><path d='M2 12L12 17L22 12'/></svg>">
 
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -69,8 +79,8 @@
     <!-- Navigation -->
     <nav class="navbar cinematic-entrance">
         <div class="nav-container">
-            <a href="#" class="brand group">
-                <div class="brand-icon-wrapper">
+            <a href="#" class="brand group" aria-label="NexGen Homepage">
+                <div class="brand-icon-wrapper" aria-hidden="true">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                         class="brand-icon">
                         <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="var(--cyan)" stroke-width="2"
@@ -84,9 +94,10 @@
                 <span class="brand-name">NexGen</span>
             </a>
             <div class="nav-links">
-                <a href="#about" class="hover-underline">Philosophy</a>
-                <a href="#systems" class="hover-underline">Architecture</a>
-                <a href="#contact" class="btn-glass">Initialize Protocol</a>
+                <a href="#about" class="hover-underline" aria-label="Read our Philosophy">Philosophy</a>
+                <a href="#systems" class="hover-underline" aria-label="Explore our Architecture">Architecture</a>
+                <a href="#contact" class="btn-glass" aria-label="Contact us to Initialize Protocol">Initialize
+                    Protocol</a>
             </div>
         </div>
     </nav>
@@ -107,13 +118,15 @@
                 engines, automated data pipelines, and intelligent CRM orchestrations for established B2B enterprises
                 looking to scale output without scaling headcount.</p>
             <div class="hero-actions">
-                <a href="#contact" class="btn-primary glow-effect">Deploy Audit <span class="arrow">→</span></a>
-                <a href="#systems" class="btn-secondary">Explore Infrastructure</a>
+                <a href="#contact" class="btn-primary glow-effect" aria-label="Deploy an operational audit">Deploy Audit
+                    <span class="arrow" aria-hidden="true">→</span></a>
+                <a href="#systems" class="btn-secondary" aria-label="Explore our core infrastructure">Explore
+                    Infrastructure</a>
             </div>
         </div>
 
         <!-- Cinematic 3D Abstract Visual -->
-        <div class="hero-visual delay-2">
+        <div class="hero-visual delay-2" aria-hidden="true">
             <div class="hologram-container parallax-element">
                 <div class="orbital-ring ring-1"></div>
                 <div class="orbital-ring ring-2"></div>
@@ -266,24 +279,27 @@
 
                 <form id="auditForm" class="high-end-form">
                     <div class="input-group">
-                        <input type="text" id="formName" required placeholder=" ">
+                        <input type="text" id="formName" name="name" required placeholder=" "
+                            aria-label="Executive Name">
                         <label for="formName">Executive Name</label>
                         <div class="input-highlight"></div>
                     </div>
 
                     <div class="input-group">
-                        <input type="email" id="formEmail" required placeholder=" ">
+                        <input type="email" id="formEmail" name="email" required placeholder=" "
+                            aria-label="Enterprise Email">
                         <label for="formEmail">Enterprise Email</label>
                         <div class="input-highlight"></div>
                     </div>
 
                     <div class="input-group text-area-group">
-                        <textarea id="formIssue" rows="3" required placeholder=" "></textarea>
+                        <textarea id="formIssue" name="issue" rows="3" required placeholder=" "
+                            aria-label="Describe the Operational Bottleneck"></textarea>
                         <label for="formIssue">Describe the Operational Bottleneck</label>
                         <div class="input-highlight"></div>
                     </div>
 
-                    <button type="submit" class="btn-primary w-full glow-effect">
+                    <button type="submit" class="btn-primary w-full glow-effect" aria-label="Submit audit request">
                         <span class="btn-text">Transmit Coordinates</span>
                         <div class="btn-backdrop"></div>
                     </button>
@@ -297,7 +313,7 @@
         <div class="container footer-content">
             <div class="footer-brand">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                    class="mr-2">
+                    class="mr-2" aria-hidden="true">
                     <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="var(--cyan)" stroke-width="2"
                         stroke-linejoin="round" />
                 </svg>
@@ -310,13 +326,14 @@
             </div>
 
             <div class="footer-links">
-                <a href="#">SYSTEM STATUS</a>
-                <a href="#">SECURITY</a>
+                <a href="#" aria-label="View System Status">SYSTEM STATUS</a>
+                <a href="#" aria-label="View Security Policy">SECURITY</a>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Deferred payload delivery block renders HTML infinitely faster -->
+    <script src="script.js" defer></script>
 </body>
 
 </html>
