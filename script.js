@@ -89,12 +89,23 @@ document.addEventListener("DOMContentLoaded", () => {
             const issue = document.getElementById('formIssue').value;
 
             try {
-                // Post to Python Flask Backend explicitly hosted on Render
-                const response = await fetch('https://agency-website-sa4h.onrender.com/api/contact', {
+                // Post to Web3Forms Serverless API
+                const response = await fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, issue })
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        access_key: '2e0af9a9-f277-49fa-a5fc-f0a928d786e0',
+                        name: name,
+                        email: email,
+                        message: issue,
+                        subject: 'New Operational Audit Request - NexGen Agency'
+                    })
                 });
+
+                const result = await response.json();
 
                 if (response.ok) {
                     btn.innerHTML = 'Audit Request Received <span class="text-cyan">✓</span>';
