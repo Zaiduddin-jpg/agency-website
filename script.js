@@ -89,20 +89,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const issue = document.getElementById('formIssue').value;
 
             try {
+                // Compile Form Data for Web3Forms Strict Parsing
+                const formData = new FormData();
+                formData.append('access_key', '2e0af9a9-f277-49fa-a5fc-f0a928d786e0');
+                formData.append('name', name);
+                formData.append('email', email);
+                formData.append('message', issue);
+                formData.append('subject', 'New Operational Audit Request - NexGen Agency');
+
                 // Post to Web3Forms Serverless API
                 const response = await fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        access_key: '2e0af9a9-f277-49fa-a5fc-f0a928d786e0',
-                        name: name,
-                        email: email,
-                        message: issue,
-                        subject: 'New Operational Audit Request - NexGen Agency'
-                    })
+                    body: formData
                 });
 
                 const result = await response.json();
